@@ -1,80 +1,547 @@
 <!doctype html>
 <html>
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-		<title>reveal.js</title>
+        <title>reveal.js</title>
 
-		<link rel="stylesheet" href="css/reveal.css">
-		<link rel="stylesheet" href="css/theme/black.css">
+        <link rel="stylesheet" href="css/reveal.css">
+        <link rel="stylesheet" href="css/theme/black.css">
 
-		<!-- Theme used for syntax highlighting of code -->
-		<link rel="stylesheet" href="lib/css/zenburn.css">
+        <!-- Theme used for syntax highlighting of code -->
+        <link rel="stylesheet" href="lib/css/zenburn.css">
 
-		<!-- Printing and PDF exports -->
-		<script>
-			var link = document.createElement( 'link' );
-			link.rel = 'stylesheet';
-			link.type = 'text/css';
-			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
-			document.getElementsByTagName( 'head' )[0].appendChild( link );
-		</script>
-	</head>
-	<body>
-		<div class="reveal">
-			<div class="slides">
-				<section>
-					<h2>Pointers in C++</h2>
-				</section>
-				<section>
-					<h2>Topics</h2>
-					<p>
-						What are pointers (with examples)?
-						https://www.programiz.com/cpp-programming/pointers
+        <!-- Printing and PDF exports -->
+        <script>
+            var link = document.createElement( 'link' );
+            link.rel = 'stylesheet';
+            link.type = 'text/css';
+            link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+            document.getElementsByTagName( 'head' )[0].appendChild( link );
+        </script>
+    </head>
+    <body>
+        <div class="reveal">
+            <div class="slides">
+                <section>
+                    <h2>Pointers in C++</h2>
+                </section>
 
-						References vs Pointers
-						https://www.tutorialspoint.com/cplusplus/cpp_references.htm
+                <section data-notes="szuper note">
+                    <h3>Address-of operator (&amp)</h3>
+                    <pre><code class="cpp" data-trim>
+                        #include &ltiostream&gt
+                        using namespace std;
+                        
+                        int main()
+                        {
+                            int x = 42;
+                            cout << "Value: " << x << endl;
+                            cout << "Address: " << &x << endl;
+                        }
+                    </code></pre>
 
-						Dynamic Memory allocation in c,cpp (stack / heap)
-						Pain of new / delete
+                    <pre class="fragment"><code class="asciidoc" data-trim>
+                        Value: 42                                                                                                                                                                            
+                        Address: 0x7fff57750814
+                    </code></pre>
+                </section>
 
-						Smart pointers (uniqie_ptr, shared_ptr, weak_ptr)
-						https://en.wikipedia.org/wiki/Smart_pointer#unique_ptr
+                <section>
+                        <h3>Dereference operator (*)</h3>
+                        <pre><code class="cpp" data-trim>
+                            #include &ltiostream&gt
+                            using namespace std;
+                            
+                            int main()
+                            {
+                                int x = 42;
+                                cout << "Value: " << x << endl;
+                                cout << "Address: " << &x << endl;
+                                cout << "Value at the memory address: " << *&x << endl;
+                            }
+                        </code></pre>
+    
+                        <pre class="fragment"><code class="asciidoc" data-trim>
+                            Value: 42                                                                                                                                                                            
+                            Address: 0x7fff57750814
+                            Value at the memory address: 42
+                        </code></pre>
+                </section>
 
-						What is the difference between make_shared and reset(new ...)
+                <section>
+                        <p style="font-size: 0.8em">A <b>pointer</b> is a variable that holds a memory address as its value</p>
+                        <pre><code style="font-size: 0.7em; line-height: 100%" class="cpp" data-trim>
+                            #include &ltiostream&gt
+                            using namespace std;
 
-						pointers and arrays
-						iterators
+                            int main()
+                            {
+                                int x = 42;
+                                int* p = &x;
+                                cout << "x: " << x << " *p: " << *p << endl;
+                                cout << "&x: " << &x << " p: " << p << endl;
+							
+                                x = 10;
+                                cout << "x: " << x << " *p: " << *p << endl;
 
-						function pointers (to a member function, static function)
-						http://en.cppreference.com/w/cpp/language/pointer
+                                *p = 1;
+                                cout << "x: " << x << " *p: " << *p << endl;
+                            }
+                        </code></pre>
 
-						nullptr
+                        <pre class="fragment"><code style="font-size: 0.7em; line-height: 100%" class="asciidoc" data-trim>
+                            x: 42 *p: 42
+                        </code></pre>
+                        <pre class="fragment"><code style="font-size: 0.7em; line-height: 100%" class="asciidoc" data-trim>
+                            &x: 0x7ffd326d58a4 p: 0x7ffd326d58a4
+                        </code></pre>
+                        <pre class="fragment"><code style="font-size: 0.7em; line-height: 100%" class="asciidoc" data-trim>
+                            x: 10 *p: 10
+                        </code></pre>
+                        <pre class="fragment"><code style="font-size: 0.7em; line-height: 100%" class="asciidoc" data-trim>
+                            x: 1 *p: 1
+                        </code></pre>
+                </section>
 
-						usage (What good are pointers?):
-						http://www.learncpp.com/cpp-tutorial/67-introduction-to-pointers/
+                <section>
+                    <p>
+                        <pre><code class="cpp" data-trim>
+                            #include &ltiostream&gt
+                            using namespace std;
 
-					</p>
-				</section>
-			</div>
-		</div>
+                            int main()
+                            {
+                                int x = 42;
+                                int y = 12;
+                                int* p = &x;
+                                cout << "p: " << p << " *p: " << *p << endl;
 
-		<script src="lib/js/head.min.js"></script>
-		<script src="js/reveal.js"></script>
+                                p = &y;
+                                cout << "p: " << p << " *p: " << *p << endl;                                
+                            }
+                        </code></pre>
 
-		<script>
-			// More info about config & dependencies:
-			// - https://github.com/hakimel/reveal.js#configuration
-			// - https://github.com/hakimel/reveal.js#dependencies
-			Reveal.initialize({
-				dependencies: [
-					{ src: 'plugin/markdown/marked.js' },
-					{ src: 'plugin/markdown/markdown.js' },
-					{ src: 'plugin/notes/notes.js', async: true },
-					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
-				]
-			});
-		</script>
-	</body>
+                        <pre class="fragment"><code class="asciidoc" data-trim>
+                            p: 0x776893e3ea34 *p: 42
+                            p: 0x776893e3ea30 *p: 12
+                        </code></pre>    
+                </section>
+
+                <section>                        
+                    <p style="font-size: 0.8em">Arithmetic operators that can be used on pointers<br> (++, --, +, -)</p>
+
+                    <pre><code style="font-size: 0.7em; line-height: 100%" class="cpp" data-trim>
+                        #include &ltiostream&gt
+                        #include &ltvector&gt
+                        using namespace std;
+                        
+                        int main()
+                        {
+                            vector&ltint&gt array = {10, 100, 200};
+                            int* p;
+                            
+                            // let us have array address in pointer.
+                            p = &array[0];
+                            
+                            for (int i = 0; i < array.size(); i++)
+                            {
+                                cout << "Address of array[" << i << "] = ";
+                                cout << p << endl;
+                            
+                                cout << "Value of array[" << i << "] = ";
+                                cout << *p << endl;
+                            
+                                // point to the next location
+                                p++;
+                            }
+                        }
+                    </code></pre>
+
+                    <pre class="fragment"><code style="font-size: 0.7em; line-height: 100%" class="asciidoc" data-trim>
+                        Address of array[0] = 0x783de990b250
+                        Value of array[0] = 10
+                        Address of array[1] = 0x783de990b254
+                        Value of array[1] = 100
+                        Address of array[2] = 0x783de990b258
+                        Value of array[2] = 200
+                    </code></pre>    
+                </section>
+
+                <section>
+                    <h3>Operator -></h3>
+                    <pre><code style="font-size: 0.7em; line-height: 100%" class="cpp" data-trim>
+                        #include &ltiostream&gt
+                        using namespace std;
+
+                        struct Point
+                        {
+                            double x;
+                            double y;
+                        };
+
+                        int main()
+                        {
+                            Point c = {0.5, 0.5};
+                            Point* p = &c;
+                            cout << "c.x: " << c.x << endl; 
+                            cout << "(*p).x: " << (*p).x << endl;
+                            cout << "p->x: " << p->x << endl;
+                        }
+                    </code></pre>
+
+                    <pre class="fragment"><code style="font-size: 0.7em; line-height: 100%" class="asciidoc" data-trim>
+                        c.x: 0.5
+                        (*p).x: 0.5
+                        p->x: 0.5
+                    </code></pre>    
+                </section>
+
+                <section>
+                    <h3>nullptr</h3>
+                    <pre><code style="font-size: 0.7em; line-height: 100%" class="cpp" data-trim>
+                        #include &ltiostream&gt
+                        using namespace std;
+
+                        int main()
+                        {
+                            int x = 42;                            
+                            int* p; // Value of p is undefined
+                            cout << "p: " << p << " *p: " << *p << endl;
+                            
+                            p = nullptr;
+                            cout << "p: " << p << endl;
+                            // cout << "*p: " << *p << endl; - CRASH
+                            
+                            if (p == nullptr)
+                                p = &x;
+                                
+                            cout << "p: " << p << " *p: " << *p << endl;
+                        }
+                    </code></pre>
+
+                    <pre class="fragment"><code style="font-size: 0.7em; line-height: 100%" class="asciidoc" data-trim>
+                        p: 0x4007f0 *p: -1991643855
+                        p: 0
+                        p: 0x7f565237a5d4 *p: 42
+                    </code></pre>    
+                </section>
+
+
+                <section>
+                    <h3>References vs Pointers</h3>
+                    <p style="font-size: 0.7em">A reference variable is an alias, another name for an already existing variable.</p>
+
+                    <pre><code style="font-size: 0.7em; line-height: 100%" class="cpp" data-trim>
+                        #include &ltiostream&gt
+                        using namespace std;
+
+                        int main()
+                        {
+                            int x = 42; // simple variable                           
+                            int& r = x; // reference variable
+                            cout << "x: " << x << " r: " << r << endl;
+                            
+                            x = 10;
+                            cout << "x: " << x << " r: " << r << endl;
+
+                            r = 1;
+                            cout << "x: " << x << " r: " << r << endl;
+                        }
+                    </code></pre>
+
+                    <pre class="fragment"><code style="font-size: 0.7em; line-height: 100%" class="asciidoc" data-trim>
+                        x: 42 r: 42
+                        x: 10 r: 10
+                        x: 1 r: 1
+                    </code></pre>
+    
+					<ul style="font-size: 0.6em">
+                        <li class="fragment">You cannot have NULL references. You must always be able to assume that a reference is connected to a legitimate piece of storage.</li>
+                        <li class="fragment">Once a reference is initialized to an object, it cannot be changed to refer to another object. Pointers can be pointed to another object at any time.</li>
+                        <li class="fragment">A reference must be initialized when it is created. Pointers can be initialized at any time.</li>
+                    </ul>
+
+                </section>
+    
+                <section>
+                    <h3>Dynamic memory allocation</h3>
+                    <p>Stack vs heap</p>
+                    <pre><code style="font-size: 0.7em; line-height: 100%" class="cpp" data-trim>
+                        // C                        
+                        int* ptr = (int*)malloc(sizeof(int));
+                        free(ptr);
+                    </code></pre>
+                    <pre><code style="font-size: 0.7em; line-height: 100%" class="cpp" data-trim>                        
+                        // C++
+                        int* ptr = new int(42);
+                        delete ptr;
+                    </code></pre>
+                    <pre><code style="font-size: 0.7em; line-height: 100%" class="cpp" data-trim>
+                        // C++11
+                        std::unique_ptr&ltint> ptr = std::make_unique&ltint>(42);
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h4>risk of shooting yourself in the foot</h4>
+                    <ul style="font-size: 0.8em">
+                        <li>Dereference nullptr</li>
+                        <li>Dereference invalid memory area</li>
+                        <li>Memory overwrite</li>
+                        <li>Double delete</li>
+                        <li>Leak</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h4>Shallow copy</h4>
+
+                    <pre><code style="font-size: 0.7em; line-height: 100%" class="cpp" data-trim>
+                        #include &ltiostream&gt
+                        using namespace std;
+
+                        struct Data
+                        {
+                            Data(int value) { p = new int(value); }
+                            ~Data() { delete p; }
+                            int value() { return *p; }
+                            int* p = nullptr;
+                        };
+
+                        int main()
+                        {
+                            Data a(30);
+                            Data b = a;
+
+                            cout << "a: " << a.value() << " b: " << b.value() << endl;
+                            *b.p = 10;
+                            cout << "a: " << a.value() << " b: " << b.value() << endl;                            
+                        }
+                    </code></pre>
+                    <pre class="fragment"><code style="font-size: 0.7em; line-height: 100%" class="asciidoc" data-trim>                            
+                        a: 30 b: 30
+                        a: 10 b: 10
+                        double free or corruption (fasttop): 0x0000000001504c20 ***
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h4>Deep copy</h4>
+
+                    <pre><code style="font-size: 0.7em; line-height: 100%" class="cpp" data-trim>
+                        #include &ltiostream&gt
+                        using namespace std;
+
+                        struct Data
+                        {
+                            Data(int value) { p = new int(value); }
+                            Data(const Data& other) { p = new int(*other.p); }
+                            ~Data() { delete p; }
+                            int value() { return *p; }
+                            int* p = nullptr;
+                        };
+
+                        int main()
+                        {
+                            Data a(30);
+                            Data b = a;
+
+                            cout << "a: " << a.value() << " b: " << b.value() << endl;
+                            *b.p = 10;
+                            cout << "a: " << a.value() << " b: " << b.value() << endl;                            
+                        }
+                    </code></pre>
+                    <pre><code style="font-size: 0.7em; line-height: 100%" class="asciidoc" data-trim>                            
+                        a: 30 b: 30
+                        a: 30 b: 10
+                    </code></pre>
+                </section>    
+
+                <section>
+                    <h3>Smart pointers</h3>
+                    <p style="font-size: 0.7em">A smart pointer is implemented as a template class that mimics, by means of operator overloading, the behaviors of a traditional (raw) pointer.</p>
+                </section>
+    
+                <section>
+                    <p style="font-size: 0.7em">A <b>unique_ptr</b> is a container for a raw pointer<br>and explicitly prevents copying of its contained pointer.</p>
+                    <pre><code style="font-size: 0.6em; line-height: 100%" class="cpp" data-trim>
+                        std::unique_ptr&ltint> p1 = std::make_unique&ltint>(5);
+                        std::unique_ptr&ltint> p2 = p1; // Compile error.
+                        std::unique_ptr&ltint> p3 = std::move(p1); // Transfers ownership.
+                                                                 // p3 now owns the memory and p1 is set to nullptr.
+                        
+                        p3.reset(); // Deletes the memory.
+                        p1.reset(); // Does nothing.
+                    </code></pre>
+                </section>
+    
+                <section>
+					<ul style="font-size: 0.6em">
+                        <li>A <b>shared_ptr</b> is a container for a raw pointer.</li>
+                        <li>It maintains reference counting ownership of its contained pointer.</li>
+                        <li>The raw pointer will be destroyed when all copies of the <b>shared_ptr</b> have been destroyed.</li>
+                    </ul>
+    
+                    <pre><code style="font-size: 0.5em; line-height: 100%" class="cpp" data-trim>
+                        #include &ltiostream&gt
+                        #include &ltmemory&gt
+                        using namespace std;
+    
+                        struct Data
+                        {
+                            int value = 0;
+                            Data(int v) { value = v; cout << "Constructed" << endl; }
+                            ~Data() { cout << "Destroyed" << endl; }
+                        };
+
+                        int main()
+                        {
+                            cout << "Create p1" << endl;
+                            shared_ptr&ltData> p1 = std::make_shared&ltData>(1);
+                            cout << "Value of p1: " << p1->value << ". Ref count of p1: " << p1.use_count() << endl;
+                            cout << "Create p2 pointing to p1" << endl;
+                            shared_ptr&ltData> p2 = p1;
+                            cout << "Value of p1: " << p1->value << ". Ref count of p1: " << p1.use_count() << endl;
+                            cout << "Value of p2: " << p2->value << ". Ref count of p2: " << p2.use_count() << endl;
+                            cout << "Reset p1" << endl;
+                            p1.reset();
+                            cout << "Ref count of p1: " << p1.use_count() << endl;
+                            cout << "Value of p2: " << p2->value << ". Ref count of p2: " << p2.use_count() << endl;
+                            cout << "Reset p2" << endl;
+                            p2.reset();                        
+                        }
+                    </code></pre>
+
+                    <pre class="fragment"><code style="font-size: 0.5em; line-height: 100%" class="asciidoc" data-trim>
+                        Create p1
+                        Constructed
+                        Value of p1: 1. Ref count of p1: 1
+                        Create p2 pointing to p1
+                        Value of p1: 1. Ref count of p1: 2
+                        Value of p2: 1. Ref count of p2: 2
+                        Reset p1
+                        Ref count of p1: 0
+                        Value of p2: 1. Ref count of p2: 1
+                        Reset p2
+                        Destroyed
+                    </code></pre>
+                </section>
+                    
+
+                <section>
+                    <ul style="font-size: 0.6em">
+                        <li>A <b>weak_ptr</b> is a container for a raw pointer.</li>
+                        <li>It is created as a copy of a <b>shared_ptr</b>.</li>
+                        <li>The existence or destruction of <b>weak_ptr</b> have no effect on the ref count.</li>
+                        <li>After all copies of a <b>shared_ptr</b> have been destroyed, all <b>weak_ptr</b> copies become empty.</li>
+                    </ul>
+    
+                    <pre><code style="font-size: 0.6em; line-height: 100%" class="cpp" data-trim>
+                        std::shared_ptr&ltint> p1 = std::make_shared&ltint>(5);
+                        std::weak_ptr&ltint> wp1 = p1; //p1 owns the memory.
+                        
+                        {
+                            std::shared_ptr&ltint> p2 = wp1.lock(); //Now p1 and p2 own the memory.
+                            if (p2) // As p2 is initialized from a weak pointer, you have to check if the memory still exists!
+                            {
+                            //Do something with p2
+                            }
+                        } //p2 is destroyed. Memory is owned by p1.
+                        
+                        p1.reset(); //Memory is deleted.
+                        
+                        std::shared_ptr&ltint> p3 = wp1.lock(); //Memory is gone, so we get an empty shared_ptr.
+                        if (p3)
+                        {
+                            //Will not execute this.
+                        }
+                    </code></pre>
+                </section>
+    
+                <section>
+                    <h3>What good are pointers?</h3>
+                    <p style="font-size: 0.6em">They are the only way you can dynamically allocate memory in C++</p>
+                    <p style="font-size: 0.6em">They can be used to pass a large amount of data to a function without copying the data</p>
+                    <p style="font-size: 0.6em">Arrays are implemented using pointers. Pointers can be used to iterate through an array</p>
+                    <p style="font-size: 0.6em">Useful in some more advanced data structures, such as linked lists and trees</p>
+                    <p style="font-size: 0.6em">They can be used to achieve polymorphism</p>
+                </section>
+
+                <section>
+                    <h3>Thank you</h3>
+                </section>
+
+                <!-- <section>
+                    <h2>Topics</h2>
+                    <p>
+                        What are pointers (with examples)?
+                        https://www.programiz.com/cpp-programming/pointers
+
+                        References vs Pointers
+                        https://www.tutorialspoint.com/cplusplus/cpp_references.htm
+
+                        Dynamic Memory allocation in c,cpp (stack / heap)
+                        Pain of new / delete
+
+                        Smart pointers (uniqie_ptr, shared_ptr, weak_ptr)
+                        https://en.wikipedia.org/wiki/Smart_pointer#unique_ptr
+
+                        What is the difference between make_shared and reset(new ...)
+
+                        pointers and arrays
+                        iterators
+
+                        function pointers (to a member function, static function)
+                        http://en.cppreference.com/w/cpp/language/pointer
+
+                        nullptr
+
+                        usage (What good are pointers?):
+                        http://www.learncpp.com/cpp-tutorial/67-introduction-to-pointers/
+
+                        What are all the member-functions created by compiler for a class?
+
+                        https://stackoverflow.com/questions/3734247/what-are-all-the-member-functions-created-by-compiler-for-a-class-does-that-hap
+
+                        make_shared vs new
+                        https://stackoverflow.com/questions/18301511/stdshared-ptr-initialization-make-sharedfoo-vs-shared-ptrtnew-foo
+
+                        operator->
+
+                        presentation help:
+                        https://github.com/ldionne/meetingcpp-2016
+
+                    </p>
+                </section> -->
+
+            </div>
+        </div>
+
+        <script src="lib/js/head.min.js"></script>
+        <script src="js/reveal.js"></script>
+
+        <script>
+            // More info about config & dependencies:
+            // - https://github.com/hakimel/reveal.js#configuration
+            // - https://github.com/hakimel/reveal.js#dependencies
+            Reveal.initialize({
+                controls: true,
+                progress: true,
+                history: true,
+                center: true,
+                
+                theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+                transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+                dependencies: [
+                    { src: 'plugin/markdown/marked.js' },
+                    { src: 'plugin/markdown/markdown.js' },
+                    { src: 'plugin/notes/notes.js', async: true },
+                    { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+                ]
+            });
+        </script>
+    </body>
 </html>
